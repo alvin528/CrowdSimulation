@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-namespace CrowdSimulation
+namespace GridMapGeneration
 {
     class GridMapGeneration
     {
@@ -146,7 +146,7 @@ namespace CrowdSimulation
                 {
                     for(int j = way0; j <= way1; j++)
                     {
-                        grid[i, j] = 1;
+                        grid[i, j] = -1;
                     }
                 }
             }
@@ -161,7 +161,7 @@ namespace CrowdSimulation
                 {
                     for (int j = fry0; j <= fry1; j++)
                     {
-                        grid[i, j] = 1;
+                        grid[i, j] = -1;
                     }
                 }
             }
@@ -184,9 +184,9 @@ namespace CrowdSimulation
             {
                 for(int j = 0; j <= grid_y; j++)
                 {
-                    if (grid[i, j] == 1)
+                    if (grid[i, j] == -1)
                         Console.Write("■");
-                    else
+                    if (grid[i, j] == 0)
                         Console.Write("□");
                 }
                 Console.WriteLine();
