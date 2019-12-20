@@ -69,6 +69,7 @@ namespace GridMapGenerations
         public void GetGridMap()
         {   
             StreamReader r = new StreamReader("C:\\Users\\Huang Han\\Desktop\\walls_doors_furnitures-result.json");
+            //StreamReader r = new StreamReader("C:\\Users\\Huang Han\\Desktop\\2_1_walls_doors_furnitures-result.json");
             string jsonText = r.ReadToEnd();
             RootObject bounding = JsonConvert.DeserializeObject<RootObject>(jsonText);
             double[] xMax = new double[4];
@@ -166,9 +167,7 @@ namespace GridMapGenerations
         {
             for(int i = 0; i < a.Count; i++)
             {
-                int t2 = (int)a[i];
-                int t1 = (int)b[i];
-                GridMap[t1, t2] = -2;
+                GridMap[(int)a[i], (int)b[i]] = -2;
             }
         }
     }
