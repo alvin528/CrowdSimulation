@@ -10,7 +10,8 @@ namespace Peoples
         public bool isExited=false;
         public int Goal_x, Goal_y;
         public int move_x, move_y;
-        public ArrayList path_x,path_y;
+        public ArrayList path_x = new ArrayList();
+        public ArrayList path_y = new ArrayList();
         public void FindGoal(ArrayList a,ArrayList b)
         {
             int temp = 999999999;

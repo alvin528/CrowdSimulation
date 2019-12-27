@@ -129,5 +129,8 @@ class test
             }
             Console.WriteLine();
         }
+        p.path_x.Add(p.start_x);
+        p.path_y.Add(p.start_y);
+
     }
 }
