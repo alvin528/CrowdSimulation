@@ -2,6 +2,7 @@
 using GridMapGenerations;
 using Peoples;
 using System.Collections;
+using astar;
 class test
 {
     public int Distence(int x,int y,int a,int b)
@@ -129,8 +130,67 @@ class test
             }
             Console.WriteLine();
         }
-        p.path_x.Add(p.start_x);
-        p.path_y.Add(p.start_y);
+        //
+        int[,] newArray = new int[Map.GridMap.GetUpperBound(1) + 1, Map.GridMap.GetUpperBound(0) + 1]; // 构造转置二维数组
+        for (int i = 0; i <= Map.GridMap.GetUpperBound(0); i++)
+        {
+            for (int j = 0; j <= Map.GridMap.GetUpperBound(1); j++)
+            {
+                if (Map.GridMap[i, j] == -1)
+                    newArray[j, i] = 1;
+                else
+                    newArray[j,i] = 0;
+            }
+        }
+        Astar astar = new Astar(newArray);
+        Point start = new Point(p.start_y, p.start_x);
+        Point end = new Point(p.Goal_y, p.Goal_x);
+        var parent = astar.FindPath(start, end, false);
 
+
+        while (parent != null)
+        {
+           // Console.WriteLine(parent.Y + "," + parent.X);
+            p.path_x.Add(parent.Y);
+            p.path_y.Add(parent.X);
+            parent = parent.ParentPoint;
+        }
+        Console.WriteLine(p.path_x.Count - 1);
+        Console.WriteLine("Print path:");
+        for(int i = p.path_x.Count - 2; i > 0; i--)
+        {
+            Console.WriteLine(p.path_x[i] + "," + p.path_y[i]);
+            Map.GridMap[(int)p.path_x[i], (int)p.path_y[i]] = -4;
+        }
+        for (int i = 0; i <= Map.y; i++)
+        {
+            for (int j = 0; j <= Map.x; j++)
+            {
+                if (Map.GridMap[j, i] == -1)
+                    Console.Write("■");
+                if (Map.GridMap[j, i] == 0)
+                    Console.Write("□");
+                if (Map.GridMap[j, i] == -2)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                    Console.Write("■");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                if (Map.GridMap[j, i] == -3)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("■");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                if (Map.GridMap[j, i] == -4)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write("■");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+            }
+            Console.WriteLine();
+        }
+        //
     }
 }
