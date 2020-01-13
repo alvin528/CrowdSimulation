@@ -3,6 +3,7 @@ using GridMapGenerations;
 using Peoples;
 using System.Collections;
 using astar;
+
 class test
 {
     public int Distence(int x,int y,int a,int b)
@@ -91,23 +92,35 @@ class test
         //    }
         //    Console.WriteLine();
         //}
-        People p = new People();
+        People[] p = new People[8]
+        {
+        new People(),
+        new People(),
+        new People(),
+        new People(),
+        new People(),
+        new People(),
+        new People(),
+        new People(),};
         //Console.WriteLine(Map.GridMap.Length); 
         //Console.WriteLine(Map.GridMap.GetLength(0)); //第一维长度 51
         //Console.WriteLine(Map.GridMap.GetLength(1)); //第二维长度 59
         Random rd = new Random();
-        while (Map.GridMap[p.start_x, p.start_y] != 0)
+        Console.WriteLine("agents:");
+        for(int i = 0; i <8; i++)
         {
-            p.start_x = rd.Next(0, 51);
-            p.start_y = rd.Next(0, 59);
+            while (Map.GridMap[p[i].start_x, p[i].start_y] != 0)
+            {
+                p[i].start_x = rd.Next(1, 50);
+                p[i].start_y = rd.Next(1, 58);
+            }
+            Map.GridMap[p[i].start_x, p[i].start_y] = -3;
+            p[i].FindGoal(x, y);
+            Console.WriteLine("-   goal: [" + p[i].Goal_x + ", " + p[i].Goal_y + "]");
+            Console.WriteLine("    name: agent"+i);
+            Console.WriteLine("    start: [" + p[i].start_x + ", " + p[i].start_y + "]");
         }
-        Map.GridMap[p.start_x, p.start_y] = -3;
-        Console.WriteLine(p.start_x);
-        Console.WriteLine(p.start_y);
-        p.FindGoal(x, y);
-        Console.WriteLine(p.Goal_x);
-        Console.WriteLine(p.Goal_y);
-        for (int i = 0; i <= Map.y; i++)
+        for (int i = Map.y; i >=0; i--)
         {
             for (int j = 0; j <= Map.x; j++)
             {
@@ -137,32 +150,42 @@ class test
             for (int j = 0; j <= Map.GridMap.GetUpperBound(1); j++)
             {
                 if (Map.GridMap[i, j] == -1)
-                    newArray[j, i] = 1;
+                newArray[j, i] = 1;
                 else
-                    newArray[j,i] = 0;
+                    newArray[j, i] = 0;
             }
         }
-        Astar astar = new Astar(newArray);
-        Point start = new Point(p.start_y, p.start_x);
-        Point end = new Point(p.Goal_y, p.Goal_x);
-        var parent = astar.FindPath(start, end, false);
+        // Astar astar = new Astar(newArray);
+        Console.WriteLine("schedule:");
+        for (int j = 0; j <8; j++)
+        {
+            Astar astar = new Astar(newArray);
+            Point start = new Point(p[j].start_y, p[j].start_x);
+            Point end = new Point(p[j].Goal_y, p[j].Goal_x);
+            var parent = astar.FindPath(start, end, false);
 
 
-        while (parent != null)
-        {
-           // Console.WriteLine(parent.Y + "," + parent.X);
-            p.path_x.Add(parent.Y);
-            p.path_y.Add(parent.X);
-            parent = parent.ParentPoint;
+            while (parent != null)
+            {
+                // Console.WriteLine(parent.Y + "," + parent.X);
+                p[j].path_x.Add(parent.Y);
+                p[j].path_y.Add(parent.X);
+                parent = parent.ParentPoint;
+            }
+            Console.WriteLine("  agent" + j+":");
+            //Console.WriteLine(p[j].path_x.Count - 1);
+            for (int i = p[j].path_x.Count - 1; i >= 0; i--)
+            {
+                Console.WriteLine("  - t: " + (p[j].path_x.Count - 1 - i));
+                Console.WriteLine("    x: " + p[j].path_x[i]);
+                Console.WriteLine("    y: " + p[j].path_y[i]);
+                //Console.WriteLine(p[j].path_x[i] + "," + p[j].path_y[i]);
+                Map.GridMap[(int)p[j].path_x[i], (int)p[j].path_y[i]] = -4;
+            }
+            Map.GridMap[(int)p[j].path_x[p[j].path_x.Count - 1], (int)p[j].path_y[p[j].path_x.Count - 1]] = -3;
+            Map.GridMap[(int)p[j].path_x[0], (int)p[j].path_y[0]] = -2;
         }
-        Console.WriteLine(p.path_x.Count - 1);
-        Console.WriteLine("Print path:");
-        for(int i = p.path_x.Count - 2; i > 0; i--)
-        {
-            Console.WriteLine(p.path_x[i] + "," + p.path_y[i]);
-            Map.GridMap[(int)p.path_x[i], (int)p.path_y[i]] = -4;
-        }
-        for (int i = 0; i <= Map.y; i++)
+        for (int i = Map.y; i >=0 ; i--)
         {
             for (int j = 0; j <= Map.x; j++)
             {
@@ -191,6 +214,7 @@ class test
             }
             Console.WriteLine();
         }
+
         //
     }
 }

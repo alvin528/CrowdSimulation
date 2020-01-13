@@ -74,8 +74,9 @@ namespace astar
 
         private int CalcH(Point end, Point point)
         {
-            int step = Math.Abs(point.X - end.X) + Math.Abs(point.Y - end.Y);
-            return step * STEP;
+            //int step = Math.Abs(point.X - end.X) + Math.Abs(point.Y - end.Y);
+            //return step * STEP;
+            return 0;
         }
 
         //获取某个点周围可以到达的点
@@ -95,7 +96,10 @@ namespace astar
         //在二维数组对应的位置不为障碍物
         private bool CanReach(int x, int y)
         {
-            return MapArray[x, y] == 0;
+            if (y < 0 || x < 0||y>50||x>58)
+                return false;
+            else
+                return MapArray[x, y] == 0;
         }
 
         public bool CanReach(Point start, int x, int y, bool IsIgnoreCorner)
